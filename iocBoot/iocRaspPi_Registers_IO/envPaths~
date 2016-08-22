@@ -1,0 +1,8 @@
+epicsEnvSet("IOC","iocStreamHadcon_Registers_IO")
+epicsEnvSet("SUPPORT","/home/aghoehne/EPICS/modules/synApps_5_7/support")
+epicsEnvSet("ARCH","linux-x86_64")
+epicsEnvSet("TOP","/home/scs/EPICS/apps/dreamplug/streamHadcon"")
+epicsEnvSet("SNCSEQ","/home/aghoehne/EPICS/modules/synApps_5_7/support/seq-2-1-13")
+epicsEnvSet("ASYN","/home/aghoehne/EPICS/modules/synApps_5_7/support/asyn-4-21")
+epicsEnvSet("STREAM","/home/aghoehne/EPICS/modules/synApps_5_7/support/stream-2-6")
+epicsEnvSet("EPICS_BASE","/home/aghoehne/EPICS/base")

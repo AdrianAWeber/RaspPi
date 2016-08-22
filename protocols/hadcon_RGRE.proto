@@ -1,0 +1,40 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+# register read 
+#
+
+# After processing finishes, the record contains the reply.
+
+    key = "RGRE";
+    recvKey = "%*{\nRECV|RECV} " $key;
+
+read_result {
+# Example of command field(INP, "@hadcon_RGRE.proto read_result(register) <port>")
+	ExtraInput = Ignore;
+    #register = ${1};
+    #in $recvKey "\${1} %x";
+    #in "%*{\nRECV|RECV} RGRE \${1} %x";
+    in "RECV RGRE \${1} %x";
+}
+
+read_request {
+# Example of command field(INP, "@hadcon_RGRE.proto read_request(register) <port>")
+	ExtraInput = Ignore;
+    #register = \${1};
+    out "RGRE \${1}";
+}
+
+read {
+# Example of command field(INP, "@hadcon_RGRE.proto read(register) <port>")
+	ExtraInput = Ignore;
+    #register = \${1};
+    read_request;
+    read_result;
+}
+

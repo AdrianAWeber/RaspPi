@@ -1,0 +1,130 @@
+Terminator  = LF;
+LockTimeout  = 20000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+## Error handling protocols
+
+err_2 {
+# this error protocol is called within other protocols 
+# .. assuming that the calling protocol was called 
+#    with at least 2 arguments 
+#    ... where the 2rd argument is the basename 
+#        of the "error records"
+#errorChannelPrefix = %\${2}s;
+
+    in "ERR%*1c %(\${2}:errorNr.VAL)i %(\${2}:error.VAL)39c";
+}
+
+err_3 {
+# this error protocol is called within other protocols 
+# .. assuming that the calling protocol was called 
+#    with at least 3 arguments 
+#    ... where the 3rd argument is the basename 
+#        of the "error records"
+#errorChannelPrefix = %\${3}s;
+
+    in "ERR%*1c %(\${3}:errorNr.VAL)i %(\${3}:error.VAL)39c";
+}
+
+err_4 {
+# this error protocol is called within other protocols 
+# .. assuming that the calling protocol was called 
+#    with at least 4 arguments 
+#    ... where the 4th argument is the basename 
+#        of the "error records"
+#errorChannelPrefix = %\${4}s;
+
+    in "ERR%*1c %(\${4}:errorNr.VAL)i %(\${4}:error.VAL)39c";
+}
+
+err_5 {
+# this error protocol is called within other protocols 
+# .. assuming that the calling protocol was called 
+#    with at least 5 arguments 
+#    ... where the 5th argument is the basename 
+#        of the "error records"
+#errorChannelPrefix = %\${5}s;
+
+    in "ERR%*1c %(\${5}:errorNr.VAL)i %(\${5}:error.VAL)39c";
+}
+
+err_6 {
+# this error protocol is called within other protocols 
+# .. assuming that the calling protocol was called 
+#    with at least 6 arguments 
+#    ... where the 6th argument is the basename 
+#        of the "error records"
+#errorChannelPrefix = %\${6}s;
+
+    in "ERR%*1c %(\${6}:errorNr.VAL)i %(\${6}:error.VAL)39c";
+}
+
+## general protocols
+get8 {	
+#Example of command field(INP, "@hadcon_CAN.proto get8($(ID),$(MASK),1,8,$(PREFIX)crate$(CRATE)_$(TASK),$(HOSTNAME)) #$(device)") 
+
+               #MessageID = %\${1}x;
+                    #Mask = %\${2}x;
+                     #RTR = %\${3}x;
+         #number of bytes = %\${4}x;
+        #RecordNamePrefix = %\${5}s;
+        
+ 	ExtraInput = Ignore;
+
+       out "SEND \$1 \$2 \$3 \$4";
+       in  "%*{\nRECV|RECV} %*x \$1 \$4 %(\${5}_1.VAL)x %(\${5}_2.VAL)x %(\${5}_3.VAL)x %(\${5}_4.VAL)x %(\${5}_5.VAL)x %(\${5}_6.VAL)x %(\${5}_7.VAL)x %(\${5}_8.VAL)x";
+  
+       @mismatch{err_5;} 
+}
+
+## general protocols
+get8.7_intr {	
+#Example of command field(INP, "@hadcon_CAN.proto get8.7_intr($(ID),$(MASK),1,8 #$(device)") 
+
+               #MessageID = %\${1}x;
+                    #Mask = %\${2}x;
+                     #RTR = %\${3}x;
+         #number of bytes = %\${4}x;
+        
+ 	ExtraInput = Ignore;
+
+       in  "%*{\nRECV|RECV} %*x \$1 \$4 %*x %*x %*x %*x %*x %*x %x %*x";
+}
+
+
+##protocol to change fan speed of low/average/high and crate switch on/off
+#high speed: out "SEND \$1 \$2 0 2 80 3C";
+#low  speed: out "SEND \$1 \$2 0 2 80 14";
+#switch on:  out "SEND \$1 \$2 0 1 3"; 
+#switch off: out "SEND \$1 \$2 0 1 1"; 
+
+#set2_CAN
+SEND_set2{
+#example of command field(INP, "@HadConCAN.proto SEND_set2($(ID),$(MASK),$(PREFIX)crate$(CRATE)_$(TASK),$(HOSTNAME)) $(device)") 
+
+	       #MessageID = \${1};
+                #Mask = \${2};
+	#RecordNamePrefix = \${3};
+  #errorChannelPrefix = \${4};
+      
+	ExtraInput = Ignore;
+	
+       out "SEND \$1 \$2 0 2 %(\${3}_1.VAL)x %(\${3}_2.VAL)x";
+        in "%*{\nRECV|RECV} %*39c";
+      @mismatch{err_3;} 
+}
+
+# Connect a stringout record to this to get
+# a generic command interface.
+# After processing finishes, the record contains the reply.
+debug {
+    ExtraInput = Ignore;
+    out "%s"; 
+    in "%39c";
+}
+
+
+

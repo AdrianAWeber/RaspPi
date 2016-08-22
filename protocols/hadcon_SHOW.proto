@@ -1,0 +1,69 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+# Connect a stringout record to this to get
+# a generic command interface.
+# After processing finishes, the record contains the reply.
+
+key = "SHOW";
+recvKey = "%*{\nRECV|RECV} "$key" ";
+
+unused_mem_start_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="unused_mem_start";
+	in $recvKey" "$cc" %x";
+}
+
+unused_mem_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="unused_mem";
+	in $recvKey" "$cc" %x";
+}
+
+free_mem_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="free_mem";
+	in $recvKey" "$cc" %x";
+}
+
+request_mem_intr {
+	Terminator  = LF;
+	cc="mem";
+	out $key" "$cc;
+}
+
+request_mem_start_intr {
+	Terminator  = LF;
+	cc="mem_start";
+	out $key" "$cc;
+}
+
+request_unused_mem_intr {
+	Terminator  = LF;
+	cc="unused_mem";
+	out $key" "$cc;
+}
+
+request_unused_mem_start_intr {
+	Terminator  = LF;
+	cc="unused_mem_start";
+	out $key" "$cc;
+}
+
+request_all_errors_intr {
+	Terminator  = LF;
+	cc="all_errors";
+	out $key" "$cc;
+}
+
+request_all_intr {
+	Terminator  = LF;
+	out $key;
+}

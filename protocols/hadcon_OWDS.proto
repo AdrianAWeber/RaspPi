@@ -1,0 +1,72 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+# one wire dual switches 
+#
+
+# After processing finishes, the record contains the reply.
+
+    key = "OWDS";
+    recvKey = "%*{\nRECV|RECV} "$key" ";
+
+OWDS {
+# Example of command field(INP, "@hadcon_OWDS.proto OWDS <port>")
+	ExtraInput = Ignore;
+    out $key;
+}
+
+read {
+# Example of command field(INP, "@hadcon_OWDS.proto read <port>")
+	ExtraInput = Ignore;
+    out $key;
+}
+
+write {
+# Example of command field(INP, "@hadcon_OWDS.proto write <port>")
+	ExtraInput = Ignore;
+    out $key %x;
+}
+
+read_ID {
+# Example of command field(INP, "@hadcon_OWDS.proto read_ID_intr <port>")
+	ExtraInput = Ignore;
+    #ID = %\${1};
+    out $key %\${1};
+}
+
+read_ID_intr {
+# Example of command field(INP, "@<file.proto> OWDS_read_ID(28F541F1010000F6) <port>")
+
+	ExtraInput = Ignore;
+
+    #ID = %\${1};
+	Terminator  = CR;
+	
+	in $recvKey"\$1 %x";
+}
+
+write_ID {
+# Example of command field(OUT, "@<file.proto> write_ID(3A2AF602000000DB,<record_RBV>) <port>")
+	ExtraInput = Ignore;
+
+    #ID  = %\${1};
+    #RBV = %\${2};
+#	Terminator  = CR;
+	
+	out $key" \$1 %x"; 
+#	out $key" \$1 3"; 
+#	in  $recvKey"\$1 %x"; 
+#	in  $recvKey"\$1 %(\${2}.VAL)x";
+#   wait 2000; 
+	in  $recvKey"\$1 %(\${2}.VAL)x";
+}
+
+OWDS_err_intr {
+	# Example of command field(INP,  "@hadcon_OWDS.proto OWDS_err_intr($(ID)) $(device)")
+    in "ERR%*1c "$key" \$1 %39c";
+}

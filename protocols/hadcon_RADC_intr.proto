@@ -1,0 +1,36 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+# atmel ADCs
+#
+
+RADC {
+# Example of command field(INP, "@<file.proto> RADC <port>")
+	ExtraInput = Ignore;
+
+	out "RADC";
+}
+
+RADC_err_intr {
+	# Example of command field(INP,  "@hadcon_RADC.proto RADC_err_intr($(ID)) $(device)")
+
+    in "ERR%*1c RADC \$1 %39c";
+}
+
+RADC_read_CHANNEL_intr {
+# Example of command field(INP, "@<file.proto> RADC_read_CHANNEL_intr(number) <port>")
+	ExtraInput = Ignore;
+
+                     #number = %\${1};
+                     
+	Terminator  = CR;
+	
+	in "%*{\nRECV|RECV} RADC \$1 %x";
+}
+
+

@@ -1,0 +1,62 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+# Connect a stringout record to this to get
+# a generic command interface.
+# After processing finishes, the record contains the reply.
+
+key = "OWSA";
+recvKey = "%*{\nRECV|RECV} "$key" ";
+
+common_adc_convert_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="common_adc_convert";
+	in $recvKey" "$cc" %*x %{(FALSE)|(TRUE)}";
+}
+
+common_temp_convert_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="common_temp_convert";
+	in $recvKey" "$cc" %*x %{(FALSE)|(TRUE)}";
+}
+
+set_common_adc_convert_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="common_adc_convert";
+	out $key" "$cc" %x";
+}
+
+set_common_temp_convert_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="common_temp_convert";
+	out $key" "$cc" %x";
+}
+
+request_common_adc_convert_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="common_adc_convert";
+	out $key" "$cc";
+}
+
+request_common_temp_convert_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	cc="common_temp_convert";
+	out $key" "$cc";
+}
+
+request_all_intr {
+	Terminator  = LF;
+	out $key;
+}
+
+

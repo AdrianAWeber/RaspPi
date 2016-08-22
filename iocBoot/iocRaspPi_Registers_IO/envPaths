@@ -1,0 +1,8 @@
+epicsEnvSet("ARCH","linux-arm")
+epicsEnvSet("IOC","iocRaspPi_Registers_IO")
+epicsEnvSet("TOP","/home/pi/epics/RaspPi")
+epicsEnvSet("SUPPORT","/home/pi/epics/modules/synApps_5_7/support")
+epicsEnvSet("SNCSEQ","/home/pi/epics/modules/synApps_5_7/support/seq-2-1-13")
+epicsEnvSet("EPICS_BASE","/home/pi/epics/base")
+epicsEnvSet("ASYN","/home/pi/epics/modules/synApps_5_7/support/asyn-4-21")
+epicsEnvSet("STREAM","/home/pi/epics/modules/synApps_5_7/support/stream-2-6")

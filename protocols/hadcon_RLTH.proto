@@ -1,0 +1,528 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+#
+# Relay Threshold
+#
+#RECV HELP RLTH *** RLTH [command_key_word] <value>
+#RECV HELP RLTH *** command : RLTH [command_key_word] 
+#RECV HELP RLTH *** response: RECV RLTH  [command_key_word] <value>
+#RECV HELP RLTH ***              [...]              ...
+#RECV HELP RLTH *** response: RECV RLTH  [command_key_word] <value>
+#RECV HELP RLTH *** RLTH available command_keys
+#RECV HELP RLTH ***    current_state
+#RECV HELP RLTH ***    current_value
+#RECV HELP RLTH ***    thr_high
+#RECV HELP RLTH ***    thr_low
+#RECV HELP RLTH ***    enable
+#RECV HELP RLTH ***    input_channel
+#RECV HELP RLTH ***    output_pin
+#RECV HELP RLTH ***    led_pin
+#RECV HELP RLTH ***    report_state_enable
+#RECV HELP RLTH ***    relay
+#RECV HELP RLTH ***    thresholds
+#RECV HELP RLTH ***    status
+#RECV HELP RLTH ***    outOfBounds_lock
+#RECV HELP RLTH ***    in_bounds_polarity
+#RECV HELP RLTH ***    out_of_bounds_pol
+#RECV HELP RLTH ***    invert_pol_logic
+#RECV HELP RLTH ***    ext_inBnds_polarity
+#RECV HELP RLTH ***    ext_inBnds_pin_pos
+#RECV HELP RLTH ***    ext_inBnds_port
+#RECV HELP RLTH ***    polarity
+#RECV HELP RLTH ***    polarity_reinit
+
+# variables
+
+key = "RLTH";
+recvKey = "%*{\nRECV|RECV} "$key" "; 
+
+err_intr {
+	# Example of command field(INP,  "@hadcon_RADC.proto RADC_err_intr($(ID)) $(device)")
+
+    in "ERR%*1c \"RLTH %*s\" \$1 %39c";
+}
+
+
+# interrupt functions
+
+all_request_intr {
+	out $key;
+}
+
+current_state_request_intr {
+	cc="current_state";
+	out $key" "$cc;
+}
+
+current_value_request_intr {
+	cc="current_value";
+	out $key" "$cc;
+}
+
+thr_high_request_intr {
+	cc="thr_high";
+	out $key" "$cc;
+}
+
+thr_low_request_intr {
+	cc="thr_low";
+	out $key" "$cc;
+}
+
+enable_request_intr {
+	cc="enable";
+	out $key" "$cc;
+}
+
+input_channel_request_intr {
+	cc="input_channel";
+	out $key" "$cc;
+}
+
+output_pin_request_intr {
+	cc="output_pin";
+	out $key" "$cc;
+}
+
+led_pin_request_intr {
+	cc="led_pin";
+	out $key" "$cc;
+}
+
+report_state_enable_request_intr {
+	cc="report_state_enable";
+	out $key" "$cc;
+}
+
+relay_request_intr {
+	cc="relay";
+	out $key" "$cc;
+}
+
+status_request_intr {
+	cc="status";
+	out $key" "$cc;
+}
+
+thresholds_request_intr {
+	cc="thresholds";
+	out $key" "$cc;
+}
+
+outOfBounds_lock_request_intr {
+	cc="outOfBounds_transit_lock";
+	out $key" "$cc;
+}
+
+in_bounds_polarity_request_intr {
+	cc="in_bounds_polarity";
+	out $key" "$cc;
+}
+
+out_of_bounds_pol_request_intr {
+	cc="out_of_bounds_polarity";
+	out $key" "$cc;
+}
+
+invert_pol_logic_request_intr {
+	cc="invert_polarity_logic";
+	out $key" "$cc;
+}
+
+ext_inBnds_polarity_request_intr {
+	cc="extern_inBounds_polarity";
+	out $key" "$cc;
+}
+
+ext_inBnds_pin_pos_request_intr {
+	cc="extern_inBounds_pin_pos";
+	out $key" "$cc;
+}
+
+ext_inBnds_port_request_intr {
+	cc="extern_inBounds_port";
+	out $key" "$cc;
+}
+
+polarity_reinit_request_intr {
+	cc="polarity_reinit";
+	out $key" "$cc;
+}
+
+polarity_request_intr {
+	cc="polarity_reinit";
+	out $key" "$cc;
+}
+
+
+#read 
+current_state_intr {
+	Terminator  = LF;
+	cc="current_state";
+	in $recvKey $cc" %x %*s";
+}
+
+current_value_intr {
+	Terminator  = LF;
+	cc="current_value";
+	in $recvKey $cc" %x";
+}
+
+thr_high_intr {
+	Terminator  = LF;
+	cc="thr_high";
+	in $recvKey $cc" %x";
+}
+
+thr_low_intr {
+	Terminator  = LF;
+	cc="thr_low";
+	in $recvKey $cc" %x";
+}
+
+thr_high_valid_intr {
+	Terminator  = LF;
+	cc="thr_high";
+	in $recvKey $cc" %*x %{INVALID|VALID}";
+}
+
+thr_low_valid_intr {
+	Terminator  = LF;
+	cc="thr_low";
+	in $recvKey $cc" %*x %{INVALID|VALID}";
+}
+
+enable_intr {
+	Terminator  = LF;
+	cc="enable";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+input_channel_intr {
+	Terminator  = LF;
+	cc="input_channel";
+	in $recvKey $cc" %x";
+}
+
+output_pin_intr {
+	Terminator  = LF;
+	cc="output_pin";
+	in $recvKey $cc" %x";
+}
+
+led_pin_intr {
+	Terminator  = LF;
+	cc="led_pin";
+	in $recvKey $cc" %x";
+}
+
+report_state_enable_intr {
+	Terminator  = LF;
+	cc="report_state_enable";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+relay_intr {
+	Terminator = LF;
+	cc="relay";
+	in $recvKey $cc" %x";
+}
+
+outOfBounds_lock_intr {
+	Terminator  = LF;
+	cc="outOfBounds_transit_lock";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+in_bounds_polarity_intr {
+	Terminator  = LF;
+	cc="in_bounds_polarity";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+out_of_bounds_pol_intr {
+	Terminator  = LF;
+	cc="out_of_bounds_polarity";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+invert_pol_logic_intr {
+	Terminator  = LF;
+	cc="invert_polarity_logic";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+
+ext_inBnds_polarity_intr {
+	Terminator  = LF;
+	cc="extern_inBounds_polarity";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+ext_inBnds_pin_pos_intr {
+	Terminator = LF;
+	cc="extern_inBounds_pin_pos";
+	in $recvKey $cc" %x";
+}
+
+ext_inBnds_port_intr {
+	Terminator = LF;
+	cc="extern_inBounds_port";
+	in $recvKey $cc" %x";
+}
+
+polarity_intr {
+	Terminator  = LF;
+	cc="polarity";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+polarity_reinit_intr {
+	Terminator  = LF;
+	cc="polarity_reinit";
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+eval_polarity_intr {
+# Example of command field(INP, "@<file.proto> eval_polarity_intr(prefix,suffix) <port>")
+# prefix e.g. etraxp201:RLTH
+# in: e.g. inBounds:TRUE OfBounds:FALSE invert:FALSE ext:TRUE ext_pos:7 ext_port:c
+#  prefix = %\${1};
+#  suffix = %\${2};
+
+	Terminator  = LF;
+	cc="polarity";
+	in $recvKey $cc " inBounds:%(\${1}:inBounds\${2}.VAL){FALSE|TRUE} OfBounds:%(\${1}:OfBounds\${2}.VAL){FALSE|TRUE} invert:%(\${1}:invert\${2}.VAL){FALSE|TRUE} ext:%(\${1}:ext\${2}.VAL){FALSE|TRUE} ext_pos:%(\${1}:ext_pos\${2}.VAL)x ext_pos:7 ext_port:%(\${1}:ext_port\${2}.VAL)x";
+	 
+}
+
+eval_status_intr {
+# Example of command field(INP, "@<file.proto> eval_status_intr(prefix,suffix) <port>")
+# prefix e.g. etraxp201:RLTH
+#
+#  prefix = %\${1};
+#  suffix = %\${2};
+
+	Terminator  = LF;
+	cc="status";
+#	in $recvKey $cc " %(\${1}:current_state\${2}.VAL)x %*s val:%(\${1}:current_value\${2}.VAL)x low:%(\${1}:thr_low\${2}.VAL)x high:%(\${1}:thr_high\${2}.VAL)x relay:%(\${1}:relay\${2}.VAL)x in:%(\${1}:input_channel\${2}.VAL)x out:%(\${1}:output_pin\${2}.VAL)x led:%(\${1}:led_pin\${2}.VAL)x enable:%(\${1}:enable\${2}.VAL){FALSE|TRUE}";
+	in $recvKey $cc " %(\${1}:current_state\${2}.VAL)x %*s val:%(\${1}:current_value\${2}.VAL)x low:%(\${1}:thr_low\${2}.VAL)x high:%(\${1}:thr_high\${2}.VAL)x relay:%(\${1}:relay\${2}.VAL)x in:%(\${1}:input_channel\${2}.VAL)x out:%(\${1}:output_pin\${2}.VAL)x led:%(\${1}:led_pin\${2}.VAL)x enable:%(\${1}:enable\${2}.VAL){FALSE|TRUE} 0t_lock:%(\${1}:outOfBounds_lock\${2}.VAL){FALSE|TRUE}";
+}
+
+eval_thresholds_intr {
+# Example of command field(INP, "@<file.proto> eval_thresholds_intr(prefix,suffix) <port>")
+# prefix e.g. etraxp201
+#
+#  prefix = %\${1};
+#  suffix = %\${2};
+
+	Terminator  = LF;
+	cc="thresholds";
+	in $recvKey $cc " low:%(\${1}:thr_low\${2}.VAL)x high:%(\${1}:thr_high\${2}.VAL)x";
+}
+
+## set functions
+
+set_thr_high_intr {
+	cc="thr_high";
+	out $key" "$cc" %x";
+}
+
+set_thr_low_intr {
+	cc="thr_low";
+	out $key" "$cc" %x";
+}
+
+set_enable_intr {
+	cc="enable";
+	out $key" "$cc" %x";
+}
+
+set_input_channel_intr {
+	cc="input_channel";
+	out $key" "$cc" %x";
+}
+
+set_output_pin_intr {
+	cc="output_pin";
+	out $key" "$cc" %x";
+}
+
+set_led_pin_intr {
+	cc="led_pin";
+	out $key" "$cc" %x";
+}
+
+set_report_state_enable_intr {
+	cc="report_state_enable";
+	out $key" "$cc" %x";
+}
+
+set_relay_intr {
+	cc="relay";
+	out $key" "$cc" %x";
+}
+
+set_outOfBounds_lock_intr {
+	cc="outOfBounds_transit_lock";
+	out $key" "$cc" %x";
+}
+
+set_invert_pol_logic_intr {
+	cc="invert_polarity_logic";
+	out $key" "$cc" %x";
+}
+
+set_ext_inBnds_pin_pos_intr {
+	cc="extern_inBounds_pin_pos";
+	out $key" "$cc" %x";
+}
+
+set_ext_inBnds_port_intr {
+	cc="extern_inBounds_port";
+	out $key" "$cc" %x";
+}
+
+
+## else
+#RADC_read_CHANNEL_intr {
+# Example of command field(INP, "@<file.proto> RADC_read_CHANNEL_intr(number) <port>")
+	ExtraInput = Ignore;
+
+#                   number = %\${1};
+                     
+#	Terminator  = CR;
+	
+#	in "%*{\nRECV|RECV} RADC \$1 %x";
+#}
+
+# non interrupt functions
+current_state {
+	cc="current_state";
+	out $key" "$cc;
+	in $recvKey $cc" %*x %s";
+}
+
+current_value {
+	cc="current_value";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+thr_high {
+	cc="thr_high";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+thr_low {
+	cc="thr_low";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+enable {
+	cc="enable";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+input_channel {
+	cc="input_channel";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+output_pin {
+	cc="output_pin";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+led_pin {
+	cc="output_pin";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+report_state_enable {
+	cc="report_state_enable";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+relay {
+	cc="relay";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+outOfBounds_lock{
+	Terminator  = LF;
+	cc="outOfBounds_transit_lock";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+in_bounds_polarity{
+	Terminator  = LF;
+	cc="in_bounds_polarity";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+out_of_bounds_pol{
+	Terminator  = LF;
+	cc="out_of_bounds_polarity";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+invert_pol_logic{
+	Terminator  = LF;
+	cc="invert_polarity_logic";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+
+ext_inBnds_polarity{
+	Terminator  = LF;
+	cc="extern_inBounds_polarity";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+ext_inBnds_pin_pos{
+	Terminator = LF;
+	cc="extern_inBounds_pin_pos";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+ext_inBnds_port{
+	Terminator = LF;
+	cc="extern_inBounds_port";
+	out $key" "$cc;
+	in $recvKey $cc" %x";
+}
+
+polarity{
+	Terminator  = LF;
+	cc="polarity";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}
+
+polarity_reinit{
+	Terminator  = LF;
+	cc="polarity_reinit";
+	out $key" "$cc;
+	in $recvKey $cc" %{FALSE|TRUE}";
+}

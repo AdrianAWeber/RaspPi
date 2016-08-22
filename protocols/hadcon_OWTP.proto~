@@ -1,0 +1,92 @@
+Terminator  = LF;
+LockTimeout  = 20000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+# one wire temperatures 
+#
+
+OWTP {
+# Example of command field(INP, "@<file.proto> OWTP_convert <port>")
+	ExtraInput = Ignore;
+
+	out "OWTP";
+}
+
+OWTP_convert_only {
+# Example of command field(INP, "@<file.proto> OWTP_convert <port>")
+	ExtraInput = Ignore;
+
+	out "OWTP convert_only";
+	in "%*{\nRECV|RECV} OWTP convert_only done";
+}
+
+OWTP_convert {
+# Example of command field(INP, "@<file.proto> OWTP_convert <port>")
+	ExtraInput = Ignore;
+
+	out "OWTP convert";
+	in "%*{\nRECV|RECV} OWTP convert done";
+}
+
+OWTP_err_intr {
+	# Example of command field(INP,  "@hadcon_OWTP.proto OWTP_err_intr($(ID)) $(device)")
+
+    in "ERR%*1c OWTP \$1 %39c";
+}
+
+OWTP_read_ID {
+# Example of command field(INP, "@<file.proto> OWTP_read_ID(28F541F1010000F6) <port>")
+	ExtraInput = Ignore;
+
+                     #ID = %\${1};
+             #recordName = %\${2};
+	
+	out "OWTP \$1";
+	in "%*{\nRECV|RECV} OWTP \$1 %x\r";
+#	@mismatch(
+#	err_command_ID_OWTP_string;
+#	); 
+}
+
+OWTP_read_ID_intr {
+# Example of command field(INP, "@<file.proto> OWTP_read_ID(28F541F1010000F6) <port>")
+	ExtraInput = Ignore;
+
+                     #ID = %\${1};
+             #recordName = %\${2};
+	
+#	in "%*{\nRECV|RECV} OWTP \$1 %x\r";
+	in "%*{\nRECV|RECV} OWTP \$1 %x";
+}
+
+OWTP_request {
+# Example of command field(INP, "@<file.proto> OWTP_request(28F541F1010000F6, record) <port>")
+	ExtraInput = Ignore;
+
+                     #ID = %\${1};
+             #recordName = %\${2};
+	
+	out "OWTP \$1";
+}
+
+########################################################################################################
+
+err_command_ID_OWTP_string
+{
+   in "ERR%*1c OWTP \$1 %*i %39c";
+}
+
+#err {
+# this error protocol is called within other protocols 
+# .. assuming that the calling protocol was called 
+#    with at least 2 arguments 
+#    ... where the 2rd argument is the basename 
+#        of the "error records"
+#errorChannelPrefix = %\${2}s;
+
+#    in "ERR%*1c %(\${2}:errorNr.VAL)i %(\${2}:error.VAL)39c";
+#}

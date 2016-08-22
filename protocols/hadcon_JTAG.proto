@@ -1,0 +1,19 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+JTAG_get {
+	Terminator  = LF;
+	in "%*{\nRECV|RECV} JTAG disabled: %{FALSE|TRUE}"
+}
+
+JTAG_set {
+	out "JTAG %i";
+}
+
+JTAG {
+	out "JTAG";
+}

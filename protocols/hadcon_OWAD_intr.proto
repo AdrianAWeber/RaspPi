@@ -1,0 +1,36 @@
+Terminator  = LF;
+LockTimeout  = 20000;
+ReplyTimeout  = 8000;
+ReadTimeout   = 8000;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+# one wire temperatures 
+#
+
+OWAD {
+# Example of command field(INP, "@<file.proto> OWAD_convert <port>")
+	ExtraInput = Ignore;
+
+	out "OWAD";
+}
+
+OWAD_err_intr {
+	# Example of command field(INP,  "@hadcon_OWAD.proto OWAD_err_intr($(ID)) $(device)")
+
+    in "ERR%*1c OWAD \$1 %39c";
+}
+
+OWAD_read_ID_intr {
+# Example of command field(INP, "@<file.proto> OWAD_read_ID(28F541F1010000F6) <port>")
+# assumes existence of records named OWAD_$(ID)_1..4
+	ExtraInput = Ignore;
+
+                     #ID = %\${1};
+             #recordName = %\${2};
+	#Terminator  = LF;
+	
+	in "%*{\nRECV|RECV} OWAD \$1 %(OWAD_\$1_1.VAL)x %(OWAD_\$1_2.VAL)x %(OWAD_\$1_3.VAL)x %(OWAD_\$1_4.VAL)x";
+}
+

@@ -1,0 +1,31 @@
+# CONFIG_SITE.Common.linux-arm
+
+
+# To install files into a location other than $(TOP) define
+#   INSTALL_LOCATION here.
+#INSTALL_LOCATION=</path/name/to/install/top>
+
+# Set this when your IOC and the host use different paths
+#   to access the application. This will be needed to boot
+#   from a Microsoft FTP server or with some NFS mounts.
+# You must rebuild in the iocBoot directory for this to
+#   take effect.
+#IOCS_APPL_TOP=/home/scs/EPICS/apps/dreamplug/streamHadcon
+
+
+#  Build shared libraries?
+#        must be either YES or NO
+#     NOTE: os/CONFIG.$(EPICS_HOST_ARCH).$(EPICS_HOST_ARCH) files and
+#     os/CONFIG_SITE.$(EPICS_HOST_ARCH).$(EPICS_HOST_ARCH) files may override
+#
+#     NOTE WIN32: YES results in a DLL.  Valid settings are
+#                   SHARED_LIBRARIES=YES and STATIC_BUILD=NO
+#                   SHARED_LIBRARIES=NO  and STATIC_BUILD=YES
+#
+#SHARED_LIBRARIES=NO
+
+#  Build client objects statically ?
+#        must be either YES or NO
+#
+#STATIC_BUILD=YES
+

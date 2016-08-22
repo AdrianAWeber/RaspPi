@@ -1,0 +1,46 @@
+Terminator  = LF;
+LockTimeout  = 5000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+# Connect a stringout record to this to get
+# a generic command interface.
+# After processing finishes, the record contains the reply.
+
+    key = "DEBG";
+    recvKey = "%*{\nRECV|RECV} "$key" ";
+
+set_level_intr {
+	Terminator = LF;
+    out $key " %x" 
+}
+
+set_mask_intr {
+	Terminator = LF;
+    out $key " %x" 
+}
+
+level_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	in $recvKey " %x %*x";
+}
+
+mask_intr {
+    ExtraInput = Ignore;
+	Terminator  = LF;
+	in $recvKey " %*x %x";
+}
+
+request_intr {
+	Terminator  = LF;
+    out $key 
+}
+
+DEBG_intr
+{
+	Terminator = LF;
+	in $key " %39c";
+}

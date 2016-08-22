@@ -1,0 +1,27 @@
+Terminator  = LF;
+LockTimeout  = 20000;
+ReplyTimeout  = 4000;
+ReadTimeout   = 500;
+WriteTimeout  = 3000;
+ExtraInput    = Ignore;
+
+#
+# one wire temperatures 
+#
+
+
+OWTP {
+# Example of command field(OUT, "@<file.proto> OWTP <port>")
+	ExtraInput = Ignore;
+
+	out "OWTP";
+}
+
+OWTP_receive {
+# Example of command field(INP, "@<file.proto> OWTP_receive($(ID)) <port>")
+	ExtraInput = Ignore;
+	#out "OWTP";
+	in "%*{\nRECV|RECV} OWTP \$1 %x";
+}
+
+
